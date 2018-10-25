@@ -10,8 +10,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 namespace Q2g.HelperPem
 {
     #region Usings
-    using Microsoft.IdentityModel.Tokens;
-    using NLog;
     using Org.BouncyCastle.Asn1;
     using Org.BouncyCastle.Asn1.Pkcs;
     using Org.BouncyCastle.Asn1.X509;
@@ -27,9 +25,7 @@ namespace Q2g.HelperPem
     using Org.BouncyCastle.X509.Extension;
     using System;
     using System.Collections.Generic;
-    using System.IdentityModel.Tokens.Jwt;
     using System.IO;
-    using System.Security.Claims;
     using System.Security.Cryptography;
     using System.Security.Cryptography.X509Certificates;
     using System.Text;
@@ -39,7 +35,6 @@ namespace Q2g.HelperPem
     static class PemCertificateHelper
     {
         #region Logger
-        private static Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
 
         #region Properties & Variables
@@ -156,8 +151,7 @@ namespace Q2g.HelperPem
             }
             catch (Exception ex)
             {
-                logger.Error(ex, $"The Method \"{nameof(GenerateSelfSignedCertificate)}\" has failed.");
-                return null;
+                throw new Exception ($"The Method \"{nameof(GenerateSelfSignedCertificate)}\" has failed.",ex);
             }
         }
 
@@ -174,8 +168,7 @@ namespace Q2g.HelperPem
             }
             catch (Exception ex)
             {
-                logger.Error(ex, $"The Method \"{nameof(ExportCertificateToPEM)}\" has failed.");
-                return null;
+                throw new Exception( $"The Method \"{nameof(ExportCertificateToPEM)}\" has failed.",ex);
             }
         }
 
@@ -193,8 +186,7 @@ namespace Q2g.HelperPem
             }
             catch (Exception ex)
             {
-                logger.Error(ex, $"The Method \"{nameof(ExportKeyToPEM)}\" has failed.");
-                return null;
+                throw new Exception($"The Method \"{nameof(ExportKeyToPEM)}\" has failed.", ex);
             }
         }
         public static X509Certificate2 ReadPemCertificateWithPrivateKey(byte[] certificateBuffer, byte[] privateKeyBuffer)
@@ -208,23 +200,22 @@ namespace Q2g.HelperPem
             }
             catch (Exception ex)
             {
-                logger.Error(ex, $"The Method \"{nameof(ReadPemCertificateWithPrivateKey)}\" has failed.");
-                return null;
+                throw new Exception($"The Method \"{nameof(ReadPemCertificateWithPrivateKey)}\" has failed.",ex);
+       
             }
         }
-        public static X509Certificate2 ReadPemCertificateWithPrivateKey(string certificateFile, string privateKeyFile)
+        public static X509Certificate2 ReadPemCertificateWithPrivateKey(string certificateFile, string privateKeyFile,string  password)
         {
             try
             {
-                var x509Cert = new X509Certificate2(certificateFile);
+                var x509Cert = new X509Certificate2(certificateFile,password);
                 if (File.Exists(privateKeyFile))
                     x509Cert = AddPemPrivateKeyToCertificate(x509Cert, privateKeyFile);
                 return x509Cert;
             }
             catch (Exception ex)
             {
-                logger.Error(ex, $"The Method \"{nameof(ReadPemCertificateWithPrivateKey)}\" has failed.");
-                return null;
+                throw new Exception($"The Method \"{nameof(ReadPemCertificateWithPrivateKey)}\" has failed.",ex);
             }
         }
 
@@ -242,8 +233,7 @@ namespace Q2g.HelperPem
             }
             catch (Exception ex)
             {
-                logger.Error(ex, $"The Method \"{nameof(AddPemPrivateKeyToCertificate)}\" has failed.");
-                return null;
+                throw new Exception($"The Method \"{nameof(AddPemPrivateKeyToCertificate)}\" has failed.",ex);
             }
         }
 
@@ -261,68 +251,15 @@ namespace Q2g.HelperPem
             }
             catch (Exception ex)
             {
-                logger.Error(ex, $"The Method \"{nameof(AddPemPrivateKeyToCertificate)}\" has failed.");
-                return null;
+                throw new Exception( $"The Method \"{nameof(AddPemPrivateKeyToCertificate)}\" has failed.",ex);
             }
         }
         #endregion
     }
 
-    static class JwtToken
-    {
-#region Logger
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-#endregion
-
-#region Public Methods
-        public static string GenerateToken(X509Certificate2 Certificate, List<Claim> claims, DateTime validUntil)
-        {
-            try
-            {
-                var securityKey = new X509SecurityKey(Certificate);
-                var signingCredentials = new SigningCredentials(securityKey, "RS512");
-                var header = new JwtHeader(signingCredentials);
-                var payload = new JwtPayload(String.Empty, String.Empty, claims, DateTime.Now, validUntil);
-                var jwt = new JwtSecurityToken(header, payload);
-                var handler = new JwtSecurityTokenHandler();
-                return handler.WriteToken(jwt);
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, $"The Method \"{nameof(GenerateToken)}\" has failed.");
-                return null;
-            }
-        }
-
-        public static bool ValidateToken(string token)
-        {
-            try
-            {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var result = tokenHandler.ReadJwtToken(token);
-                if (result.Payload.Exp != null)
-                {
-                    var univeralTime = DateTime.Now.ToUniversalTime();
-                    var validTo = result.ValidTo - univeralTime;
-                    if (validTo.Ticks < 0)
-                        return false;
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, $"The Method \"{nameof(GenerateToken)}\" has failed.");
-                return false;
-            }
-        }
-#endregion
-    }
-
+  
     class QlikClientCertificate
     {
-#region Logger
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-#endregion
 
 #region Enums
         public enum PemStringType
@@ -535,8 +472,7 @@ namespace Q2g.HelperPem
             }
             catch (Exception ex)
             {
-                logger.Error(ex, $"The Method \"{nameof(GetCertificateFromPEM)}\" has failed.");
-                return null;
+                throw new Exception($"The Method \"{nameof(GetCertificateFromPEM)}\" has failed.",ex);
             }
         }
 #endregion
@@ -545,7 +481,6 @@ namespace Q2g.HelperPem
     class RSAParameterTraits
     {
 #region Logger
-        private static Logger logger = LogManager.GetCurrentClassLogger();
 #endregion
 
 #region Fields
@@ -619,7 +554,7 @@ namespace Q2g.HelperPem
             }
             catch (Exception ex)
             {
-                logger.Error(ex, $"The Method \"{nameof(RSAParameterTraits)}\" has failed.");
+                throw new Exception($"The Method \"{nameof(RSAParameterTraits)}\" has failed.",ex);
             }
         }
 #endregion
