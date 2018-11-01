@@ -14,9 +14,9 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
-namespace System.Security.Cryptography
+namespace IoTSharp.X509Extensions
 {
-#if  NET40
+#if  NET40 || NET45 || NET46
     //nothing
 #else
 

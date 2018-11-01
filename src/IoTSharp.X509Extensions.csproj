@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>IoTSharp.X509Extensions</RootNamespace>
+    <TargetFrameworks>netcoreapp2.1;net40;net46</TargetFrameworks>
     <PackageId>IoTSharp.X509Extensions</PackageId>
     <Authors>Konrad Mattheis und Martin Berthold &amp;  MaiKeBing</Authors>
     <Copyright>Copyright (c) 2018</Copyright>
@@ -10,51 +11,24 @@
     <PackageProjectUrl>https://www.nuget.org/packages/IoTSharp.X509Extensions/</PackageProjectUrl>
     <PackageTags>qlik, PEM, certificates</PackageTags>
     <Description>Includes extensions for the class X509Certificate2, a signer, and the certificate creation.</Description>
- 
-
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <AssemblyName>IoTSharp.X509Extensions</AssemblyName>
   </PropertyGroup>
 
-  <Choose>
-    <When Condition="'$(MSBuildRuntimeType)' == 'Core'">
-      <PropertyGroup>
-        <TargetFramework>netcoreapp2.1</TargetFramework>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-      <PropertyGroup>
-        <TargetFrameworks>netcoreapp2.1;net40</TargetFrameworks>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
-
-  <Choose>
-    <When Condition="'$(Configuration)' == 'Release'">
-      <PropertyGroup>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-      <PropertyGroup>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
-
-  <!--<Target Name="PublishToNugetWithAPIKey" AfterTargets="GenerateNuspec">
-    <ReadLinesFromFile File="$(SolutionDir)\..\..\nugetapikey.txt">
-      <Output TaskParameter="Lines" PropertyName="NugetAPIKey" />
-    </ReadLinesFromFile>
-    <Exec WorkingDirectory="$(BaseDir)" Command="dotnet nuget push $(PackageOutputAbsolutePath)$(PackageId).$(PackageVersion).nupkg -k $(NugetAPIKey) -s https://api.nuget.org/v3/index.json" />
-  </Target>-->
-  <!--<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <Reference Include="System.Security.Cryptography.X509Certificates" />
-  </ItemGroup>-->
-  <ItemGroup>
+ 
+ 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
+    <PackageReference Include="BouncyCastle" Version="1.8.3.1" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
+    <PackageReference Include="BouncyCastle" Version="1.8.3.1" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
     <PackageReference Include="BouncyCastle.NetCore" Version="1.8.3" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="GitVersionTask" Version="4.0.0" PrivateAssets="All" />
   </ItemGroup>
 </Project>

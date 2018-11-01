@@ -8,7 +8,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  */
 #endregion
 
-namespace System.Security.Cryptography
+namespace IoTSharp.X509Extensions
 {
     #region Usings
     using System;
@@ -20,6 +20,10 @@ namespace System.Security.Cryptography
     using Org.BouncyCastle.Crypto.Parameters;
     using System.Text;
     using Q2g.HelperPem;
+    using Org.BouncyCastle.Pkcs;
+    using Org.BouncyCastle.Asn1.Pkcs;
+    using Org.BouncyCastle.Crypto;
+    using Org.BouncyCastle.Security;
     #endregion
 
     public static class X509PemExtensions
@@ -33,7 +37,7 @@ namespace System.Security.Cryptography
             {
                 if (@this.HasPrivateKey)
                 {
-#if NET40
+#if NET46 || NET40
                     var p = (@this.PrivateKey as RSACryptoServiceProvider).ExportParameters(true);
 #else
 
@@ -66,7 +70,7 @@ namespace System.Security.Cryptography
                 if (!string.IsNullOrEmpty(privateKeyFile) && @this.HasPrivateKey)
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(privateKeyFile));
-#if  NET40
+#if  NET46 || NET40
                     var p = (@this.PrivateKey as RSACryptoServiceProvider).ExportParameters(true);
 #else
 
@@ -89,7 +93,7 @@ namespace System.Security.Cryptography
                 throw new Exception($"Certificate could not be saved. cert: {certFile} - key: {privateKeyFile}", ex);
             }
         }
-
+    
         public static X509Certificate2 LoadPem(this X509Certificate2 @this, string certFile, string privateKeyFile = null, string password = null)
         {
             try
