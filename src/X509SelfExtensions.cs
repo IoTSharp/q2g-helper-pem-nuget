@@ -72,30 +72,7 @@ namespace IoTSharp.X509Extensions
                 return signedCert.CopyWithPrivateKey(ecdsa);
             }
         }
-        public static string NameFormat { get; set; } = "CN={0},C=CN,ST=XiErQi,O=IOT#,OU=IoT# Certificate Authority";
-        public static X509Certificate2 CreateTlsClientRSA(this X509Certificate2 issuer, System.Net.IPAddress iPAddress, Guid guid, TimeSpan timeSpan)
-        {
-            return issuer.CreateTlsClientRSA(string.Format(NameFormat, iPAddress.ToString()), guid, iPAddress, timeSpan);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="issuer">颁发者证书</param>
-        /// <param name="iPAddress">IP地址</param>
-        /// <param name="_ST">省份</param>
-        /// <param name="_L">城市</param>
-        /// <param name="_O">路局编码</param>
-        /// <param name="_OU">站编码</param>
-        /// <param name="guid">ID</param>
-        /// <returns></returns>
-        public static X509Certificate2 CreateTlsClientRSA(this X509Certificate2 issuer, System.Net.IPAddress iPAddress, string _ST, string _L, string _O, string _OU, Guid guid)
-        {
-            return issuer.CreateTlsClientRSA($"CN={iPAddress.ToString()},C=CN,L={_L},ST={_ST},O={_O},OU={_OU}", guid, iPAddress, TimeSpan.FromDays(10 * 365));
-        }
-        public static X509Certificate2 CreateTlsClientRSA(this X509Certificate2 issuer, System.Net.IPAddress iPAddress)
-        {
-            return issuer.CreateTlsClientRSA(string.Format(NameFormat, iPAddress.ToString()), Guid.NewGuid(), iPAddress, TimeSpan.FromDays(100 * 365));
-        }
+     
         public static X509Certificate2 CreateTlsClientRSA(this X509Certificate2 issuer, string name, Guid guid, System.Net.IPAddress iPAddress, TimeSpan timeSpan)
         {
             SubjectAlternativeNameBuilder altNames = new SubjectAlternativeNameBuilder();
