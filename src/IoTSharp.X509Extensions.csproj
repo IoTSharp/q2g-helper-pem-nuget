@@ -21,15 +21,16 @@
  
  
   <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
-    <PackageReference Include="BouncyCastle" Version="1.8.3.1" />
+    <PackageReference Include="BouncyCastle" Version="1.8.4" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
-    <PackageReference Include="BouncyCastle" Version="1.8.3.1" />
+    <PackageReference Include="BouncyCastle" Version="1.8.4" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
     <PackageReference Include="BouncyCastle.NetCore" Version="1.8.3" />
   </ItemGroup>
   <ItemGroup>
+
     <PackageReference Include="GitVersionTask" Version="4.0.0" PrivateAssets="All" />
   </ItemGroup>
 </Project>
