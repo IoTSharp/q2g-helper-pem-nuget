@@ -135,7 +135,7 @@ namespace Q2g.HelperPem
                 // merge into X509Certificate2
                 var x509 = new X509Certificate2(certificate.GetEncoded());
 
-                var seq = (Asn1Sequence)Asn1Object.FromByteArray(info.PrivateKeyAlgorithm.GetDerEncoded());
+                var seq = (Asn1Sequence)Asn1Object.FromByteArray(info.ParsePrivateKey().GetDerEncoded());
                 if (seq.Count != 9)
                     throw new Exception("malformed sequence in RSA private key");
 

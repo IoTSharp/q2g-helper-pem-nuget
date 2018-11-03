@@ -64,36 +64,13 @@ namespace IoTSharp.X509Extensions
 
         public static void SavePem(this X509Certificate2 @this, string certFile, string privateKeyFile = null)
         {
-            try
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(certFile));
-                if (!string.IsNullOrEmpty(privateKeyFile) && @this.HasPrivateKey)
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(privateKeyFile));
-#if  NET46 || NET40
-                    var p = (@this.PrivateKey as RSACryptoServiceProvider).ExportParameters(true);
-#else
-
-                    var p = @this.GetRSAPrivateKey().ExportParameters(true);
-#endif
-                    var key = new RsaPrivateCrtKeyParameters(
-                        new Org.BouncyCastle.Math.BigInteger(1, p.Modulus), new Org.BouncyCastle.Math.BigInteger(1, p.Exponent), new Org.BouncyCastle.Math.BigInteger(1, p.D),
-                        new Org.BouncyCastle.Math.BigInteger(1, p.P), new Org.BouncyCastle.Math.BigInteger(1, p.Q), new Org.BouncyCastle.Math.BigInteger(1, p.DP), new Org.BouncyCastle.Math.BigInteger(1, p.DQ),
-                        new Org.BouncyCastle.Math.BigInteger(1, p.InverseQ));
-                    using (var sw = new StreamWriter(privateKeyFile))
-                    {
-                        var pemWriter = new Org.BouncyCastle.OpenSsl.PemWriter(sw);
-                        pemWriter.WriteObject(key);
-                    }
-                }
-                File.WriteAllText(certFile, PemCertificateHelper.ExportCertificateToPEM(@this));
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Certificate could not be saved. cert: {certFile} - key: {privateKeyFile}", ex);
-            }
+            SavePem(@this, out string cert, out string privateKey);
+            System.IO.File.WriteAllText(certFile, cert);
+            System.IO.File.WriteAllText(privateKeyFile, privateKey);
         }
-    
+
+
+
         public static X509Certificate2 LoadPem(this X509Certificate2 @this, string certFile, string privateKeyFile = null, string password = null)
         {
             try
