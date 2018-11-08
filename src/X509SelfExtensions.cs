@@ -85,8 +85,8 @@ namespace IoTSharp.X509Extensions
             altNames.AddIpAddress(iPAddress);
             return CreateTlsClientRSA(issuer, name, guid, altNames);
         }
-        public static X509Certificate2 CreateTlsClientRSA(X509Certificate2 issuer, string name, SubjectAlternativeNameBuilder altNames) => CreateTlsClientRSA(issuer, name, Guid.NewGuid(), altNames);
-        public static X509Certificate2 CreateTlsClientRSA(X509Certificate2 issuer, string name, Guid guid, SubjectAlternativeNameBuilder altNames)
+        public static X509Certificate2 CreateTlsClientRSA(this X509Certificate2 issuer, string name, SubjectAlternativeNameBuilder altNames) => CreateTlsClientRSA(issuer, name, Guid.NewGuid(), altNames);
+        public static X509Certificate2 CreateTlsClientRSA( this X509Certificate2 issuer, string name, Guid guid, SubjectAlternativeNameBuilder altNames)
         {
             using (RSA ecdsa = RSA.Create(2048))
             {
