@@ -65,8 +65,8 @@ namespace IoTSharp.X509Extensions
         public static void SavePem(this X509Certificate2 @this, string certFile, string privateKeyFile = null)
         {
             SavePem(@this, out string cert, out string privateKey);
-            System.IO.File.WriteAllText(certFile, cert);
-            System.IO.File.WriteAllText(privateKeyFile, privateKey);
+            File.WriteAllText(certFile, cert);
+            File.WriteAllText(privateKeyFile, privateKey);
         }
 
 

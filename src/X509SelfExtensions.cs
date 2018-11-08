@@ -45,7 +45,13 @@ namespace IoTSharp.X509Extensions
             }
             return @this;
         }
-
+        /// <summary>
+        /// nistP384
+        /// </summary>
+        /// <param name="issuer"></param>
+        /// <param name="name"></param>
+        /// <param name="altNames"></param>
+        /// <returns></returns>
         public static X509Certificate2 CreateTlsClient(this X509Certificate2 issuer, string name, SubjectAlternativeNameBuilder altNames)
         {
             using (ECDsa ecdsa = ECDsa.Create(ECCurve.NamedCurves.nistP384))
@@ -72,15 +78,19 @@ namespace IoTSharp.X509Extensions
                 return signedCert.CopyWithPrivateKey(ecdsa);
             }
         }
-     
+
         public static X509Certificate2 CreateTlsClientRSA(this X509Certificate2 issuer, string name, Guid guid, System.Net.IPAddress iPAddress, TimeSpan timeSpan)
         {
-            SubjectAlternativeNameBuilder altNames = new SubjectAlternativeNameBuilder();
+            var altNames = new SubjectAlternativeNameBuilder();
             altNames.AddIpAddress(iPAddress);
+            return CreateTlsClientRSA(issuer, name, guid, altNames);
+        }
+        public static X509Certificate2 CreateTlsClientRSA(X509Certificate2 issuer, string name, SubjectAlternativeNameBuilder altNames) => CreateTlsClientRSA(issuer, name, Guid.NewGuid(), altNames);
+        public static X509Certificate2 CreateTlsClientRSA(X509Certificate2 issuer, string name, Guid guid, SubjectAlternativeNameBuilder altNames)
+        {
             using (RSA ecdsa = RSA.Create(2048))
             {
                 var request = new CertificateRequest(name, ecdsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-
                 request.CertificateExtensions.Add(
                     new X509BasicConstraintsExtension(false, false, 0, false));
                 request.CertificateExtensions.Add(
@@ -88,7 +98,6 @@ namespace IoTSharp.X509Extensions
                 request.CertificateExtensions.Add(
                     new X509EnhancedKeyUsageExtension(
                         new OidCollection { new Oid("1.3.6.1.5.5.7.3.2") }, false));
-
                 if (altNames != null)
                 {
                     request.CertificateExtensions.Add(altNames.Build());
@@ -99,6 +108,7 @@ namespace IoTSharp.X509Extensions
                 return signedCert.CopyWithPrivateKey(ecdsa);
             }
         }
+
         public static X509Certificate2 BuildLocalhostTlsSelfSignedServer()
         {
             SubjectAlternativeNameBuilder sanBuilder = new SubjectAlternativeNameBuilder();
