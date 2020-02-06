@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>IoTSharp.X509Extensions</RootNamespace>
-    <TargetFrameworks>netcoreapp2.1;net40;net46</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net40;net46</TargetFrameworks>
     <PackageId>IoTSharp.X509Extensions</PackageId>
     <Authors>Konrad Mattheis und Martin Berthold &amp;  MaiKeBing</Authors>
     <Copyright>Copyright (c) 2018</Copyright>
@@ -20,14 +20,12 @@
 
  
  
-  <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
-    <PackageReference Include="BouncyCastle" Version="1.8.4" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'net40' or '$(TargetFramework)' == 'net46'">
+    <PackageReference Include="BouncyCastle" Version="1.8.5" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
-    <PackageReference Include="BouncyCastle" Version="1.8.4" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
-    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.3" />
+ 
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1' or  '$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'netcoreapp3.0' ">
+    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.5" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="StyleCop.Cache" />
@@ -42,4 +40,5 @@
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
   </ItemGroup>
+ 
 </Project>
