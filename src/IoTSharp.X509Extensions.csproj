@@ -24,7 +24,7 @@
  
  
   <ItemGroup Condition="'$(TargetFramework)' == 'net40' or '$(TargetFramework)' == 'net46'">
-    <PackageReference Include="BouncyCastle" Version="1.8.6" />
+    <PackageReference Include="BouncyCastle" Version="1.8.6.1" />
   </ItemGroup>
  
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1' or  '$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'netcoreapp3.0' ">
