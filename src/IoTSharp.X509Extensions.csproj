@@ -4,10 +4,10 @@
     <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net40;net46</TargetFrameworks>
     <PackageId>IoTSharp.X509Extensions</PackageId>
     <Authors>Konrad Mattheis und Martin Berthold &amp;  MaiKeBing</Authors>
-    <Copyright>Copyright (c) 2018</Copyright>
+    <Copyright>Copyright (c) 2018-2020</Copyright>
     <Company>IoT#</Company>
     <RepositoryUrl>https://github.com/IoTSharp/IoTSharp.X509Extensions</RepositoryUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/IoTSharp/IoTSharp.X509Extensions/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://www.nuget.org/packages/IoTSharp.X509Extensions/</PackageProjectUrl>
     <PackageTags>qlik, PEM, certificates</PackageTags>
     <Description>Includes extensions for the class X509Certificate2, a signer, and the certificate creation.</Description>
@@ -19,20 +19,17 @@
     <AssemblyVersion>1.0.1.0</AssemblyVersion>
     <FileVersion>1.0.1.0</FileVersion>
     <Version>1.0.1</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
- 
- 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net40' or '$(TargetFramework)' == 'net46'">
-    <PackageReference Include="BouncyCastle" Version="1.8.5" />
-  </ItemGroup>
- 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1' or  '$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'netcoreapp3.0' ">
-    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.5" />
-  </ItemGroup>
+
   <ItemGroup>
     <None Remove="StyleCop.Cache" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.6" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Update="Helpers.cs">
       <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
