@@ -26,8 +26,10 @@
   <ItemGroup>
     <None Remove="StyleCop.Cache" />
   </ItemGroup>
+
+
   <ItemGroup>
-    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.6" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.6.7" />
   </ItemGroup>
 
   <ItemGroup>
