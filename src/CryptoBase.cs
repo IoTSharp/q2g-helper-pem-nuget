@@ -60,7 +60,7 @@ namespace Q2g.HelperPem
 
         protected void ReadKey(string keyPath)
         {
-            ReadKey(new FileStream(keyPath, FileMode.Open));
+            ReadKey(new FileStream(keyPath, FileMode.Open, FileAccess.Read, FileShare.Read));
         }
 
         protected void ReadKey(Stream keyStream)

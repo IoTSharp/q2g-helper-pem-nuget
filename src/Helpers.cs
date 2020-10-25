@@ -16,6 +16,7 @@ namespace Q2g.HelperPem
     using Org.BouncyCastle.Asn1.X509;
     using Org.BouncyCastle.Crypto;
     using Org.BouncyCastle.Crypto.Generators;
+    using Org.BouncyCastle.Crypto.Operators;
     using Org.BouncyCastle.Crypto.Parameters;
     using Org.BouncyCastle.Crypto.Prng;
     using Org.BouncyCastle.Math;
@@ -88,10 +89,6 @@ namespace Q2g.HelperPem
                 var serialNumber = BigInteger.ProbablePrime(128, new Random());
                 certificateGenerator.SetSerialNumber(serialNumber);
 
-                // Signature Algorithm
-                var signatureAlgorithm = "SHA512WithRSA";
-                certificateGenerator.SetSignatureAlgorithm(signatureAlgorithm);
-
                 // Issuer and Subject Name
                 var subjectDN = new X509Name(subjectName);
                 var issuerDN = new X509Name(issuerName);
@@ -126,8 +123,11 @@ namespace Q2g.HelperPem
                 // Generating the Certificate
                 var issuerKeyPair = userKeyPair;
 
+                // Signature Algorithm
+                ISignatureFactory signatureFactory = new Asn1SignatureFactory("SHA512WITHRSA", userKeyPair.Private, random);
+
                 // selfsign certificate
-                var certificate = certificateGenerator.Generate(userKeyPair.Private, random);
+                var certificate = certificateGenerator.Generate(signatureFactory);
 
                 // correcponding private key
                 var info = PrivateKeyInfoFactory.CreatePrivateKeyInfo(userKeyPair.Private);
@@ -135,7 +135,7 @@ namespace Q2g.HelperPem
                 // merge into X509Certificate2
                 var x509 = new X509Certificate2(certificate.GetEncoded());
 
-                var seq = (Asn1Sequence)Asn1Object.FromByteArray(info.ParsePrivateKey().GetDerEncoded());
+                var seq = (Asn1Sequence)info.ParsePrivateKey();
                 if (seq.Count != 9)
                     throw new Exception("malformed sequence in RSA private key");
 
