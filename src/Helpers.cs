@@ -419,6 +419,9 @@ namespace Q2g.HelperPem
                 var byteValue = rd.ReadByte();
                 if (byteValue != 0x00)
                     return null;
+#if NET5_0
+                var rsa = new RSACryptoServiceProvider();
+#else
 
                 // The data following the version will be the ASN.1 data itself, which in our case
                 // are a sequence of integers.
@@ -433,6 +436,7 @@ namespace Q2g.HelperPem
                 };
 
                 var rsa = new RSACryptoServiceProvider(parms);
+#endif
                 var rsAparams = new RSAParameters()
                 {
                     Modulus = rd.ReadBytes(DecodeIntegerSize(rd)),
